@@ -1,0 +1,41 @@
+---
+- name: Update Survey From External API
+  hosts: localhost
+  gather_facts: false
+
+  target_job_template: "Deploy Application"
+
+  api_url: "https://mock-api.example.com/environments"
+
+  tasks:
+
+  - name: Query external API
+    ansible.builtin.uri:
+    url: "{{ api_url }}"
+    method: GET
+    return_content: true
+    register: api_result
+
+  - name: Store choices
+    ansible.builtin.set_fact:
+    survey_choices: "{{ api_result.json.environments }}"
+
+  - name: Update survey
+    ansible.controller.job_template:
+    controller_host: "{{ controller_host }}"
+    controller_username: "{{ controller_username }}"
+    controller_password: "{{ controller_password }}"
+    validate_certs: "{{ validate_certs }}"
+    name: "{{ target_job_template }}"
+    survey_enabled: true
+    survey_spec:
+      name: Dynamic Environment Survey
+      description: Generated from external API
+      spec:
+      - question_name: Environment
+        question_description: Select deployment target
+        variable: environment
+        required: true
+        type: multiplechoice
+        choices: "{{ survey_choices }}"
+        default: "{{ survey_choices[0] }}"
