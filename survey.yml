@@ -3,23 +3,10 @@
   hosts: localhost
   gather_facts: false
 
-  target_job_template: "Deploy Application"
-
-  api_url: "https://mock-api.example.com/environments"
+  vars:
+   target_job_template: "Deploy Application"
 
   tasks:
-
-  - name: Query external API
-    ansible.builtin.uri:
-    url: "{{ api_url }}"
-    method: GET
-    return_content: true
-    register: api_result
-
-  - name: Store choices
-    ansible.builtin.set_fact:
-    survey_choices: "{{ api_result.json.environments }}"
-
   - name: Update survey
     ansible.controller.job_template:
     controller_host: "{{ controller_host }}"
