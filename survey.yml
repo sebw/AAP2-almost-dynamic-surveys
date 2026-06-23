@@ -1,10 +1,7 @@
 ---
-- name: Update Survey From External API
+- name: Update Survey
   hosts: localhost
   gather_facts: false
-
-  vars:
-   target_job_template: "Deploy Application"
 
   tasks:
   - name: Update survey
