@@ -4,12 +4,12 @@ Dynamic survey has been [a request from the community](https://github.com/ansibl
 
 The feature has yet to appear in AWX and Ansible Automation Platform (AAP). 
 
-Until then, you're left with an "almost dynamic" option.
+Until then, you're left with an "almost dynamic" option and one major limitation.
 
-Indeed, survey specifications can be updated in an automated manner!
+Indeed, survey specifications can be updated in an automated manner. 
 
-This repository contains an example of playbook that can be used as a job template and scheduled on a regular basis in AAP.
+The limitation I'm talking about is that if your AWX/AAP has multiple surveys enabled on a job template (e.g. name of the artifact and version of the artifact), you can't dynamicallly update the version of the artifact once chosen in the list.
 
-Now you can extend this example playbook to call external APIs. A simple example is retrieving a list of VLANs from Netbox.
+You can update a survey by using `survey.yml` that can be used as a job template in AWX/AAP. You can schedule the job when the survey needs updating.
 
-The job template can also be included as a step in an AAP workflow. Let's assume a new VLAN has been deployed but the survey is not yet up to date, you can run the survey update prior to running the provisioning step.
+Now you can extend `survey.yml` to call external APIs and take the return values as input. A simple example is retrieving a list of VLANs from Netbox.
